@@ -7,7 +7,8 @@ def call(Map args){
     node(args.labels){
         checkout scm
         script{
-            def  command = "\"${args.pythonPath}\\python.exe\" setup.py --version"
+            def python_command = "${tool ${args.toolName}}\\python.exe"
+            def command = "\"${python_command}\" setup.py --version"
             echo "Executing ${command}"
             def pkg_version = bat(returnStdout: true, script: "@${command}").trim()
             deleteDir()
