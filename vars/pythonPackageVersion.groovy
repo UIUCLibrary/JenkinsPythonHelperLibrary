@@ -1,8 +1,10 @@
 def call(Map args){
-    def defaultArgs = []
+    def defaultArgs = [
+            labels: "Python3"
+    ]
 
     args = defaultArgs << args
-    node("Python3"){
+    node(args.labels){
         checkout scm
         script{
             def  command = "\"${args.pythonPath}\\python.exe\" setup.py --version"
