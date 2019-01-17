@@ -1,0 +1,5 @@
+Get Python package's names
+
+# Parameters
+
+* pythonPath - Directory where python is located
