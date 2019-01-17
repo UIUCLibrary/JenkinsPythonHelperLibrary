@@ -2,12 +2,13 @@ def call(Map args){
     def defaultArgs = [
             labels: "Python3"
     ]
-
     args = defaultArgs << args
+    echo "Locating Python version ${args.toolName}"
     node(args.labels){
         checkout scm
         script{
             def python_command = "${tool ${args.toolName}}\\python.exe"
+            echo "Using ${python_command}"
             def command = "\"${python_command}\" setup.py --name"
             echo "Executing ${command}"
             def pkg_name = bat(returnStdout: true, script: "@${command}").trim()
