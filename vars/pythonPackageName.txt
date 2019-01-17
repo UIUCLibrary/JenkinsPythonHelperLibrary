@@ -2,4 +2,4 @@ Get Python package's names
 
 # Parameters
 
-* pythonPath - Directory where python is located
+* toolName - the name of version of python to use. This should be set from the Global Tools menu
