@@ -7,7 +7,8 @@ def call(Map args){
     node(args.labels){
         checkout scm
         script{
-            def python_command = "${tool ${args.toolName}}\\python.exe"
+            def tool_path = tool "${args.toolName}"
+            def python_command = "${tool_path}\\python.exe"
             echo "Using ${python_command}"
             def command = "\"${python_command}\" setup.py --name"
             echo "Executing ${command}"

@@ -8,7 +8,7 @@ def call(Map args){
         checkout scm
         script{
             def tool_path = tool "${args.toolName}"
-            def python_command = "${tool_path }}\\python.exe"
+            def python_command = "${tool_path }\\python.exe"
             echo "Using ${python_command}"
             def command = "\"${python_command}\" setup.py --version"
             echo "Executing ${command}"
