@@ -5,7 +5,9 @@ def call(Map args){
     node("Python3"){
         checkout scm
         script{
-            def pkg_version = bat(returnStdout: true, script: "@\"${args.pythonPath}\\python.exe\" setup.py --version").trim()
+            def  command = "\"${args.pythonPath}\\python.exe\" setup.py --version\""
+            echo "Running ${command}"
+            def pkg_version = bat(returnStdout: true, script: "@${command}").trim()
             deleteDir()
             return pkg_version
         }
