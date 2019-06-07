@@ -17,20 +17,21 @@ def call(Map args){
     def testEnvironments = environments.join(" ")
 
     pythonPkgs.each{
-        run_tox_test_in_node(args.pythonExec, it, testEnvironments, args.testNodeLabels)
+        run_tox_test_in_node(args.pythonToolName, it, testEnvironments, args.testNodeLabels)
     }
 }
 
-def run_tox_test_in_node(python_exec, pythonPkgFile, test_args, nodeLabels){
+def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
     script{
         def stashCode = UUID.randomUUID().toString()
         stash includes: "${pythonPkgFile}", name: "${stashCode}"
-        def python_version = bat(
-                label: "Checking Python version for ${python_exec}",
-                returnStdout: true,
-                script: '@python --version').trim()
 
         node("${nodeLabels}"){
+            def python_exec = "tool ${pythonToolName}" + "/python.exe"
+            def python_version = bat(
+                    label: "Checking Python version for ${python_exec}",
+                    returnStdout: true,
+                    script: '@python --version').trim()
             try{
                 checkout scm
                 withEnv(['VENVPATH=venv']) {
