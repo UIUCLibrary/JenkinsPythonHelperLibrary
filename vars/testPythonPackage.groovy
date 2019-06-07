@@ -20,7 +20,7 @@ def call(Map args){
 
     pythonPkgs.each{
         echo "Working on ${it}"
-//        def runner = new ToxRunner(this)
+        def runner = new ToxRunner(this)
 //        runner.run_tox_test_in_node(args.pythonToolName, it, testEnvironments, args.testNodeLabels)
 ////        run_tox_test_in_node(args.pythonToolName, it, testEnvironments, args.testNodeLabels)
     }
