@@ -18,11 +18,12 @@ def call(Map args){
 
     def testEnvironments = environments.join(" ")
 
-//    pythonPkgs.each{
+    pythonPkgs.each{
+        echo "Working on ${it}"
 //        def runner = new ToxRunner(this)
 //        runner.run_tox_test_in_node(args.pythonToolName, it, testEnvironments, args.testNodeLabels)
 ////        run_tox_test_in_node(args.pythonToolName, it, testEnvironments, args.testNodeLabels)
-//    }
+    }
 }
 //
 //def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
