@@ -2,7 +2,12 @@ package org.ds.python
 
 class ToxRunner implements Serializable {
     def steps
-    ToxRunner(steps){this.steps = steps}
+    ToxRunner(steps){
+        this.steps = steps
+        this.WORKSPACE = steps.WORKSPACE
+        this.NODE_NAME = steps.NODE_NAME
+
+    }
 
     def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
         def stashCode = UUID.randomUUID().toString()
@@ -21,7 +26,7 @@ class ToxRunner implements Serializable {
                 steps.error("No Python version detected")
             }
             try{
-                steps.checkout scm
+                steps.checkout steps.scm
                 steps.withEnv(['VENVPATH=venv']) {
                     steps.bat(label: "Create virtualenv based on ${python_version} on ${NODE_NAME} node",
                             script: "${python_exec} -m venv %VENVPATH%"
