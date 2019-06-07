@@ -2,6 +2,9 @@ package org.ds.python
 
 class ToxRunner implements Serializable {
     def steps
+    def WORKSPACE
+    def NODE_NAME
+
     ToxRunner(steps){
         this.steps = steps
         this.WORKSPACE = steps.WORKSPACE
