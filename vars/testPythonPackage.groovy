@@ -28,7 +28,7 @@ def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
 
         node("${nodeLabels}"){
             def python_home = "${tool pythonToolName}"
-            def python_exec = '"' + python_home + "/python.exe" + '"'
+            def python_exec = '"' + python_home + "\\python.exe" + '"'
 
             def python_version = bat(
                     label: "Checking Python version for ${python_exec}",
