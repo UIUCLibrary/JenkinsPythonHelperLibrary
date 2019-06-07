@@ -2,14 +2,9 @@ package org.ds.python
 
 class ToxRunner implements Serializable {
     def steps
-    def WORKSPACE
-    def NODE_NAME
 
     ToxRunner(steps){
         this.steps = steps
-        this.WORKSPACE = steps.WORKSPACE
-        this.NODE_NAME = steps.NODE_NAME
-
     }
 
     def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
@@ -17,6 +12,9 @@ class ToxRunner implements Serializable {
         steps.stash includes: "${pythonPkgFile}", name: "${stashCode}"
 
         steps.node("${nodeLabels}"){
+            def WORKSPACE = steps.WORKSPACE
+            def NODE_NAME = steps.NODE_NAME
+
             def python_home = "${steps.tool pythonToolName}"
             def python_exec = '"' + python_home + "\\python.exe" + '"'
 
