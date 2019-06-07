@@ -33,7 +33,7 @@ def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
             def python_version = bat(
                     label: "Checking Python version for ${python_exec}",
                     returnStdout: true,
-                    script: '@python --version').trim()
+                    script: "@${python_exec} --version").trim()
 
             if(python_version == ""){
                 error("No Python version detected")
