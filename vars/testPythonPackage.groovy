@@ -17,7 +17,7 @@ def call(Map args){
     def testEnvironments = environments.join(" ")
 
     pythonPkgs.each{
-        run_tox_test_in_node(pythonExec, it, testEnvironments, args.testNodeLabels)
+        run_tox_test_in_node(args.pythonExec, it, testEnvironments, args.testNodeLabels)
     }
 }
 
