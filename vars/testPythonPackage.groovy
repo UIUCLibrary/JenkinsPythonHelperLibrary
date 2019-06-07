@@ -27,11 +27,17 @@ def run_tox_test_in_node(pythonToolName, pythonPkgFile, test_args, nodeLabels){
         stash includes: "${pythonPkgFile}", name: "${stashCode}"
 
         node("${nodeLabels}"){
-            def python_exec = "tool ${pythonToolName}" + "/python.exe"
+            def python_home = "${tool pythonToolName}"
+            def python_exec = python_home + "/python.exe"
+
             def python_version = bat(
                     label: "Checking Python version for ${python_exec}",
                     returnStdout: true,
                     script: '@python --version').trim()
+
+            if(python_version == ""){
+                error("No Python version detected")
+            }
             try{
                 checkout scm
                 withEnv(['VENVPATH=venv']) {
