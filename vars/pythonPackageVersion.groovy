@@ -3,7 +3,7 @@ def call(Map args){
             labels: "Python3"
     ]
     args = defaultArgs << args
-    getPythonVersion(args)
+    return getPythonVersion(args)
 }
 
 def getPythonVersion(Map<String, String> args) {
