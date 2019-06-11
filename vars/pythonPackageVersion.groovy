@@ -1,10 +1,18 @@
+import groovy.transform.Memoized
+
+
 def call(Map args){
     def defaultArgs = [
             labels: "Python3"
     ]
     args = defaultArgs << args
+    getPythonVersion(args)
+}
+
+@Memoized
+def getPythonVersion(Map<String, String> args) {
     echo "Locating Python version ${args.toolName}"
-    node(args.labels){
+    node(args.labels) {
         checkout scm
         script {
             try {
