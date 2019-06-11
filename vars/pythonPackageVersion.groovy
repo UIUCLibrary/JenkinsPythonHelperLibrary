@@ -1,9 +1,17 @@
+python_package_version = ''
+
 def call(Map args){
     def defaultArgs = [
             labels: "Python3"
     ]
     args = defaultArgs << args
-    return getPythonVersion(args)
+
+    if(python_package_version?.trip()){
+        echo "Reusing ${python_package_version} as version"
+        return python_package_version
+    }
+    python_package_version = getPythonVersion(args)
+    return python_package_version
 }
 
 def getPythonVersion(Map<String, String> args) {
