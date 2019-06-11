@@ -3,8 +3,12 @@ def call(Map args){
             labels: "Python3"
     ]
     args = defaultArgs << args
+    return getPythonVersion(args)
+}
+
+def getPythonVersion(Map<String, String> args) {
     echo "Locating Python version ${args.toolName}"
-    node(args.labels){
+    node(args.labels) {
         checkout scm
         script {
             try {
