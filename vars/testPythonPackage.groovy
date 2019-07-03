@@ -7,15 +7,21 @@ def call(Map args){
 
 
     ]
+    def testRunners = [:]
+
     args = defaultArgs << args
 
     def pythonPkgs = findFiles glob: "${args.pkgRegex}"
 
     def envArg = "-e ${args.testEnvs.join(',')}"
 
-    pythonPkgs.each{
-        echo "Working on ${it}"
-        def runner = new ToxRunner(this)
-        runner.run_tox_test_in_node(args.pythonToolName, it, envArg, args.testNodeLabels)
+    pythonPkgs.each{ it
+        testRunners[it] ={
+            echo "Working on ${it}"
+            def runner = new ToxRunner(this)
+            runner.run_tox_test_in_node(args.pythonToolName, it, envArg, args.testNodeLabels)
+
+        }
+        parallel testRunners
     }
 }
