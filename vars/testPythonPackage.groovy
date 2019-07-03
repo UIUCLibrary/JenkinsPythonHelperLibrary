@@ -16,7 +16,7 @@ def call(Map args){
     def envArg = "-e ${args.testEnvs.join(',')}"
 
     pythonPkgs.each{ it
-        testRunners[it] ={
+        testRunners["Testing ${it}"] ={
             echo "Working on ${it}"
             def runner = new ToxRunner(this)
             runner.run_tox_test_in_node(args.pythonToolName, it, envArg, args.testNodeLabels)
