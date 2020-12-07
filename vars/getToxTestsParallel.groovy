@@ -82,7 +82,7 @@ def generateToxReport(tox_env, toxResultFile){
 }
 
 def call(args = [:]){
-    echo "${args}"
+    echo "args === >>>>>>>>>${args}"
     def envNamePrefix = args['envNamePrefix']
     def label = args.agent.dockerfile.label
     if (args.agent.dockerfile.filename == null){
