@@ -81,7 +81,7 @@ def generateToxReport(tox_env, toxResultFile){
     }
 }
 
-def call(args = [:]){
+def call(Map args = [:]){
     error( "args === >>>>>>>>>${args}")
 
     def envNamePrefix = args['envNamePrefix']
