@@ -83,9 +83,9 @@ def generateToxReport(tox_env, toxResultFile){
 
 def call(args = [:]){
     def envNamePrefix = args['envNamePrefix']
-    def label = args['label']
-    def dockerfile = args['dockerfile']
-    def dockerArgs = args['dockerArgs']
+    def label = args.agent.dockerfile.label
+    def dockerfile = args.agent.dockerfile.filename
+    def dockerArgs = args.agent.dockerfile.additionalBuildArgs
     script{
         def TOX_RESULT_FILE_NAME = "tox_result.json"
         def envs
