@@ -191,4 +191,3 @@ def call(args = [:]){
         return jobs
     }
 }
-return this
