@@ -90,10 +90,10 @@ def call(args = [:]){
         def TOX_RESULT_FILE_NAME = "tox_result.json"
         def envs
         def originalNodeLabel
+        def dockerImageName = "${currentBuild.projectName}:tox".replaceAll("-", "").toLowerCase()
         node(label){
             originalNodeLabel = env.NODE_NAME
             checkout scm
-            def dockerImageName = "${currentBuild.projectName}:tox".replaceAll("-", "").toLowerCase()
             def dockerImage = docker.build(dockerImageName, "-f ${dockerfile} ${dockerArgs} .")
             dockerImage.inside{
                 envs = getToxEnvs()
@@ -114,7 +114,6 @@ def call(args = [:]){
         echo "Found tox environments for ${envs.join(', ')}."
         def dockerImageForTesting = "${currentBuild.projectName}:tox".replaceAll("-", "").toLowerCase()
         node(originalNodeLabel){
-            def dockerImageName = "tox"
             checkout scm
             dockerImageForTesting = docker.build(dockerImageName, "-f ${dockerfile} ${dockerArgs} . ")
 
