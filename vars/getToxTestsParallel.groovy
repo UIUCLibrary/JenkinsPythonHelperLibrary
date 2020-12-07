@@ -86,7 +86,7 @@ def call(args = [:]){
     def label = args.agent.dockerfile.label
     def dockerfile = args.agent.dockerfile.filename
     def dockerArgs = args.agent.dockerfile.additionalBuildArgs
-    script{
+//    script{
         def TOX_RESULT_FILE_NAME = "tox_result.json"
         def envs
         def originalNodeLabel
@@ -110,7 +110,7 @@ def call(args = [:]){
 //                                """
 //                 )
 //             }
-        }
+//        }
         echo "Found tox environments for ${envs.join(', ')}."
         def dockerImageForTesting = "${currentBuild.projectName}:tox".replaceAll("-", "").toLowerCase()
         node(originalNodeLabel){
