@@ -82,7 +82,8 @@ def generateToxReport(tox_env, toxResultFile){
 }
 
 def call(args = [:]){
-    echo "args === >>>>>>>>>${args}"
+    error( "args === >>>>>>>>>${args}")
+
     def envNamePrefix = args['envNamePrefix']
     def label = args.agent.dockerfile.label
     if (args.agent.dockerfile.filename == null){
@@ -90,7 +91,6 @@ def call(args = [:]){
     }
     def dockerfile = args.agent.dockerfile.filename
     def dockerArgs = args.agent.dockerfile.additionalBuildArgs
-//    script{
         def TOX_RESULT_FILE_NAME = "tox_result.json"
         def envs
         def originalNodeLabel
@@ -116,7 +116,7 @@ def call(args = [:]){
 //             }
 //        }
         echo "Found tox environments for ${envs.join(', ')}."
-        def dockerImageForTesting = "${currentBuild.projectName}:tox".replaceAll("-", "").toLowerCase()
+        def dockerImageForTesting
         node(originalNodeLabel){
             checkout scm
             dockerImageForTesting = docker.build(dockerImageName, "-f ${dockerfile} ${dockerArgs} . ")
