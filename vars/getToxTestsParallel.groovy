@@ -82,10 +82,10 @@ def generateToxReport(tox_env, toxResultFile){
 }
 
 def call(args = [:]){
+    echo "${args}"
     def envNamePrefix = args['envNamePrefix']
     def label = args.agent.dockerfile.label
     if (args.agent.dockerfile.filename == null){
-        echo "${args}"
         error "filename is missing"
     }
     def dockerfile = args.agent.dockerfile.filename
