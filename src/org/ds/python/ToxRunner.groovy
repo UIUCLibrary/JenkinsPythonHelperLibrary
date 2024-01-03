@@ -38,12 +38,12 @@ class ToxRunner implements Serializable {
 
 
                     steps.bat(label: "Install Tox in virtualenv",
-                            script: "%VENVPATH%\\Scripts\\pip install tox"
+                            script: "%VENVPATH%\\Scripts\\pip install toxFunctions"
                     )
 
                     steps.unstash "${stashCode}"
                     steps.bat(label: "Testing ${pythonPkgFile}",
-                            script: "%VENVPATH%\\Scripts\\tox.exe -c ${WORKSPACE}/tox.ini --parallel=auto -o --workdir=${WORKSPACE}/tox --installpkg=${pythonPkgFile} ${test_args} -vv"
+                            script: "%VENVPATH%\\Scripts\\toxFunctions.exe -c ${WORKSPACE}/toxFunctions.ini --parallel=auto -o --workdir=${WORKSPACE}/toxFunctions --installpkg=${pythonPkgFile} ${test_args} -vv"
                     )
                 }
             }
