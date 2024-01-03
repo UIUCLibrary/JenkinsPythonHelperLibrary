@@ -1,0 +1,8 @@
+Build a Python Package
+
+# Parameters
+
+* agent - Jenkins agent to run test on
+* buildCmd - Override the default build command. The default uses the built-in python build module with a pep517 builder to generate sdist and wheels into a dist directory
+* retries - (Default: 1) The number of failed times attempts before failing the task
+* post - (optional) Groovy map object that contains 3 optional post-stages, similar to declarative stage commands. These optional stages are 'success', 'failure', and 'cleanup'

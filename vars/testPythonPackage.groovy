@@ -1,6 +1,7 @@
 import org.ds.python.ToxRunner
 
 def call(Map args){
+    echo 'testPythonPackage deprecated: use testPythonPkg command instead'
     def defaultArgs = [
             testNodeLabels: "Python3",
             testEnvs: ["py"],
