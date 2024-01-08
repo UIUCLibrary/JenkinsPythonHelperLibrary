@@ -1,0 +1,11 @@
+Get Tox stages
+
+# Parameters
+
+* envNamePrefix - Prefix for Jenkins stage
+* label - agent label
+* dockerfile - agent dockerfile
+* dockerArgs - (Optional) docker build Args
+* dockerRunArgs - (Optional) docker container run time args
+* beforeRunning - (Optional) Closure to run prior to running tox command
+* retry - (default 1) Number of failed attempts before failing the stage

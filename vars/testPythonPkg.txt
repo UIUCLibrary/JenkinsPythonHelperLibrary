@@ -1,0 +1,9 @@
+Test package
+
+# Parameters
+
+* agent - Jenkins agent to run test on
+* retries - (Default: 1) The number of failed times attempts before failing the task
+* testSetup - Run this closure prior to running the test command.
+* testCommand - Override the default test command. The default runs tox for the current env. "tox -e py"
+* post - (optional) Groovy map object that contains 3 optional post-stages, similar to declarative stage commands. These optional stages are 'success', 'failure', and 'cleanup'
