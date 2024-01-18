@@ -33,7 +33,7 @@ def getToxTestsParallel(args = [:]){
     script{
         def envs
         def originalNodeLabel
-        def dockerImageName = "${currentBuild.fullProjectName}:tox".replaceAll("-", "").replaceAll('/', "_").replaceAll(' ', "").toLowerCase()
+        def dockerImageName = "${currentBuild.fullProjectName}_tox_${UUID.randomUUID().toString()}".replaceAll("-", "").replaceAll('/', "_").replaceAll(' ', "").toLowerCase()
         retry(retries){
             node(label){
                 originalNodeLabel = env.NODE_NAME
@@ -42,15 +42,16 @@ def getToxTestsParallel(args = [:]){
                 dockerImage.inside{
                     envs = getToxEnvs()
                 }
+                def untaggingScript = "docker image rm --no-prune ${dockerImage.imageName()}"
                 if(isUnix()){
                     sh(
                         label: "Untagging Docker Image used to run tox",
-                        script: "docker image rm --no-prune ${dockerImage.imageName()}"
+                        script: untaggingScript
                     )
                 } else {
                     bat(
                         label: "Untagging Docker Image used to run tox",
-                        script: "docker image rm --no-prune ${dockerImage.imageName()}"
+                        script: untaggingScript
                     )
                 }
             }
@@ -102,18 +103,8 @@ def getToxTestsParallel(args = [:]){
                                     }
                                     sh(script: "docker ps --no-trunc --filter ancestor=${dockerImageForTesting.imageName()} --format {{.Names}}", returnStatus: true)
                                 } else {
-                                    def runningContainers = powershell(
-                                                    returnStdout: true,
-                                                    script: "docker ps --no-trunc --filter \"ancestor=${dockerImageForTesting.imageName()}\" --format \"{{.Names}}\""
-                                                    )
-                                    if (!runningContainers?.trim()) {
-                                        powershell(
-                                            label: "Untagging Docker Image used to run tox",
-                                            script: "docker image rm --no-prune ${dockerImageForTesting.imageName()}",
-                                            returnStatus: true
-                                        )
-                                    }
-                                    powershell(script: "docker ps --no-trunc --filter \"ancestor=${dockerImageForTesting.imageName()}\" --format \"{{.Names}}\"", returnStatus: true)
+                                    def powershellScript = libraryResource 'com/ds/cleanupUnusedDockerImage.ps1'
+                                    powershell(script: "${powershellScript} ${dockerImageForTesting.imageName()}", returnStatus: true)
                                 }
                             }
                         }
