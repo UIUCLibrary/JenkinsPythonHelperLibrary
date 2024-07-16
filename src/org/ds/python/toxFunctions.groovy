@@ -27,6 +27,7 @@ def getToxTestsParallel(args = [:]){
     def label = args['label']
     def dockerfile = args['dockerfile']
     def dockerArgs = args['dockerArgs']
+    def toxWorkingDir = args.containsKey('toxWorkingDir') ? args['toxWorkingDir'] : './.tox'
     def preRunClosure = args['beforeRunning']
     def retries = args.containsKey('retry') ? args.retry : 1
     def dockerRunArgs = args.get('dockerRunArgs', '')
@@ -82,12 +83,12 @@ def getToxTestsParallel(args = [:]){
                                     if(isUnix()){
                                         sh(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox -v --workdir=/tmp/tox -e ${tox_env}"
+                                            script: "tox -v --workdir=${toxWorkingDir} -e ${tox_env}"
                                         )
                                     } else {
                                         bat(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox -v --workdir=%TEMP%\\tox -e ${tox_env}"
+                                            script: "tox -v --workdir${toxWorkingDir} -e ${tox_env}"
                                         )
                                     }
                                     cleanWs(

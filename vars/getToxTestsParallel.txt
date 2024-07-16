@@ -8,4 +8,5 @@ Get Tox stages
 * dockerArgs - (Optional) docker build Args
 * dockerRunArgs - (Optional) docker container run time args
 * beforeRunning - (Optional) Closure to run prior to running tox command
+* toxWorkingDir - (default ./.tox) Working directory for tox
 * retry - (default 1) Number of failed attempts before failing the stage
