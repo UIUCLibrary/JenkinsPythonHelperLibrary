@@ -21,6 +21,12 @@ def getToxEnvs(){
     return envs
 }
 
+static def get_verbose_command(level){
+    if(level == 0){
+        return ''
+    }
+    return "-${'v' * level}"
+}
 
 def getToxTestsParallel(args = [:]){
     def envNamePrefix = args['envNamePrefix']
@@ -30,6 +36,7 @@ def getToxTestsParallel(args = [:]){
     def toxWorkingDir = args.containsKey('toxWorkingDir') ? args['toxWorkingDir'] : './.tox'
     def preRunClosure = args['beforeRunning']
     def retries = args.containsKey('retry') ? args.retry : 1
+    def verbosity = args.containsKey('verbosity') ? args.verbosity : 0
     def dockerRunArgs = args.get('dockerRunArgs', '')
 
     script{
@@ -83,12 +90,12 @@ def getToxTestsParallel(args = [:]){
                                     if(isUnix()){
                                         sh(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox run -v --workdir=${toxWorkingDir} -e ${tox_env}"
+                                            script: "tox run ${get_verbose_command(verbosity)} --workdir=${toxWorkingDir} -e ${tox_env}"
                                         )
                                     } else {
                                         bat(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox run -v --workdir=${toxWorkingDir} -e ${tox_env}"
+                                            script: "tox run ${get_verbose_command(verbosity)} --workdir=${toxWorkingDir} -e ${tox_env}"
                                         )
                                     }
                                     cleanWs(

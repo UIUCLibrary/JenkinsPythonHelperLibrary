@@ -10,3 +10,4 @@ Get Tox stages
 * beforeRunning - (Optional) Closure to run prior to running tox command
 * toxWorkingDir - (default ./.tox) Working directory for tox
 * retry - (default 1) Number of failed attempts before failing the stage
+* verbosity - (default 0) Verbosity level from running tox command.
