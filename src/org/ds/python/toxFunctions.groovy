@@ -32,7 +32,7 @@ def getToxTestsParallel(args = [:]){
     def dockerRunArgs = args.get('dockerRunArgs', '')
 
     script{
-        def envs
+        def envs = []
         def originalNodeLabel
         def dockerImageName = "${currentBuild.fullProjectName}_tox_${UUID.randomUUID().toString()}".replaceAll("-", "").replaceAll('/', "_").replaceAll(' ', "").toLowerCase()
         retry(retries){
@@ -40,20 +40,23 @@ def getToxTestsParallel(args = [:]){
                 originalNodeLabel = env.NODE_NAME
                 checkout scm
                 def dockerImage = docker.build(dockerImageName, "-f ${dockerfile} ${dockerArgs} .")
-                dockerImage.inside{
-                    envs = getToxEnvs()
-                }
-                def untaggingScript = "docker image rm --no-prune ${dockerImage.imageName()}"
-                if(isUnix()){
-                    sh(
-                        label: "Untagging Docker Image used to run tox",
-                        script: untaggingScript
-                    )
-                } else {
-                    bat(
-                        label: "Untagging Docker Image used to run tox",
-                        script: untaggingScript
-                    )
+                try{
+                    dockerImage.inside{
+                        envs = getToxEnvs()
+                    }
+                } finally {
+                    def untaggingScript = "docker image rm --no-prune ${dockerImage.imageName()}"
+                    if(isUnix()){
+                        sh(
+                            label: "Untagging Docker Image used to run tox",
+                            script: untaggingScript
+                        )
+                    } else {
+                        bat(
+                            label: "Untagging Docker Image used to run tox",
+                            script: untaggingScript
+                        )
+                    }
                 }
             }
         }
