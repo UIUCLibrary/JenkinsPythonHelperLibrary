@@ -21,18 +21,26 @@ def getToxEnvs(){
     return envs
 }
 
+static def get_verbose_command(level){
+    if(level == 0){
+        return ''
+    }
+    return "-${'v' * level}"
+}
 
 def getToxTestsParallel(args = [:]){
     def envNamePrefix = args['envNamePrefix']
     def label = args['label']
     def dockerfile = args['dockerfile']
     def dockerArgs = args['dockerArgs']
+    def toxWorkingDir = args.containsKey('toxWorkingDir') ? args['toxWorkingDir'] : './.tox'
     def preRunClosure = args['beforeRunning']
     def retries = args.containsKey('retry') ? args.retry : 1
+    def verbosity = args.containsKey('verbosity') ? args.verbosity : 0
     def dockerRunArgs = args.get('dockerRunArgs', '')
 
     script{
-        def envs
+        def envs = []
         def originalNodeLabel
         def dockerImageName = "${currentBuild.fullProjectName}_tox_${UUID.randomUUID().toString()}".replaceAll("-", "").replaceAll('/', "_").replaceAll(' ', "").toLowerCase()
         retry(retries){
@@ -40,20 +48,23 @@ def getToxTestsParallel(args = [:]){
                 originalNodeLabel = env.NODE_NAME
                 checkout scm
                 def dockerImage = docker.build(dockerImageName, "-f ${dockerfile} ${dockerArgs} .")
-                dockerImage.inside{
-                    envs = getToxEnvs()
-                }
-                def untaggingScript = "docker image rm --no-prune ${dockerImage.imageName()}"
-                if(isUnix()){
-                    sh(
-                        label: "Untagging Docker Image used to run tox",
-                        script: untaggingScript
-                    )
-                } else {
-                    bat(
-                        label: "Untagging Docker Image used to run tox",
-                        script: untaggingScript
-                    )
+                try{
+                    dockerImage.inside{
+                        envs = getToxEnvs()
+                    }
+                } finally {
+                    def untaggingScript = "docker image rm --no-prune ${dockerImage.imageName()}"
+                    if(isUnix()){
+                        sh(
+                            label: "Untagging Docker Image used to run tox",
+                            script: untaggingScript
+                        )
+                    } else {
+                        bat(
+                            label: "Untagging Docker Image used to run tox",
+                            script: untaggingScript
+                        )
+                    }
                 }
             }
         }
@@ -79,12 +90,12 @@ def getToxTestsParallel(args = [:]){
                                     if(isUnix()){
                                         sh(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox -v --workdir=/tmp/tox -e ${tox_env}"
+                                            script: "tox run ${get_verbose_command(verbosity)} --workdir=${toxWorkingDir} -e ${tox_env}"
                                         )
                                     } else {
                                         bat(
                                             label: "Running Tox with ${tox_env} environment",
-                                            script: "tox -v --workdir=%TEMP%\\tox -e ${tox_env}"
+                                            script: "tox run ${get_verbose_command(verbosity)} --workdir=${toxWorkingDir} -e ${tox_env}"
                                         )
                                     }
                                     cleanWs(
