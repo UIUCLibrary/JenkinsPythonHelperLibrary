@@ -100,6 +100,7 @@ def getToxTestsParallel(args = [:]){
                                     }
                                     cleanWs(
                                         deleteDirs: true,
+                                        notFailBuild: true,
                                         patterns: [
                                             [pattern: ".tox/", type: 'INCLUDE'],
                                         ]
