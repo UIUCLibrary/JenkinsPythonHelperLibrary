@@ -1,4 +1,5 @@
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+import org.ds.CustomMatrix
 
 @NonCPS
 // Function to generate all permutations, with support for exclusion lists
@@ -139,8 +140,11 @@ def validate(Map config){
 
 
 def call(Map config){
+    def matrix = new CustomMatrix(this)
+
     try{
-        validate(config)
+        matrix.validate(config)
+//        validate(config)
         def stages = generatePermutations(config.axes, config.excludes).collect{
                 row ->row.collectEntries{element -> [element.name, element.value]}
             }.collectEntries{entryParams ->
